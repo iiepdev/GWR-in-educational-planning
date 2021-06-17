@@ -1,1 +1,1 @@
-# GWR-in-educational-planning
+# Geographically Weighted Regressions in educational planning
