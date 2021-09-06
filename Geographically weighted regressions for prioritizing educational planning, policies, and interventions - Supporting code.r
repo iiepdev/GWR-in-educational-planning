@@ -30,7 +30,7 @@ library("spatialEco")
 #install.packages("broom")
 library("broom")
 
-setwd("C:\\Users\\g.vargas\\BOX\\IIEP_MyProjects\\MP_01000298\\WorkFiles_Experts\\298-Issue-Papers\\298-Issue-Paper-GWR\\Replication files")
+setwd("C:\\Users\\g.vargas\\BOX\\IIEP_MyProjects\\MP_01000298_RND_SDA\\WorkFiles_Experts\\298-Issue-Papers\\298-Issue-Paper-GWR\\Replication files")
 
 PolygonShape <- readOGR(dsn = "Data\\Colombia", layer = "GWR - Colombia", drop_unsupported_fields=FALSE, disambiguateFIDs=TRUE)
 cat(" ")
@@ -38,9 +38,9 @@ cat("The final names of the variables that were imported are the following:")
 
 colnames(PolygonShape@data)
 
-ListVariables <- list("E_s11_to_1", "MurderRate", "ProxyGDP", "Poverty", "GC_indrura", "Vulnerabil", "Threat", "Lack_Respo", "TransEducP", "TransAlimE", "HS_Cober_7", "HS_Cober_1", "G_IGA_tota", "GC_discapi")
+ListVariables <- list("E_s11_to_1", "MurderRate", "ProxyGDP", "Poverty", "SISBEN1PC", "GC_indrura", "Vulnerabil", "Threat", "Lack_Respo", "TransEducP", "TransAlimE", "HS_Cober_7", "HS_Cober_1", "G_IGA_tota", "GC_discapi")
 
-PolygonShapeTrimmed <- PolygonShape[c("Lat", "Long", "admin2Pcod", "E_s11_to_1", "MurderRate", "ProxyGDP", "Poverty", "GC_indrura", "Vulnerabil", "Threat", "Lack_Respo", "TransEducP", "TransAlimE", "HS_Cober_7", "HS_Cober_1", "G_IGA_tota", "GC_discapi")]
+PolygonShapeTrimmed <- PolygonShape[c("Lat", "Long", "admin2Pcod", "E_s11_to_1", "SISBEN1PC", "MurderRate", "ProxyGDP", "Poverty", "GC_indrura", "Vulnerabil", "Threat", "Lack_Respo", "TransEducP", "TransAlimE", "HS_Cober_7", "HS_Cober_1", "G_IGA_tota", "GC_discapi")]
 PolygonShapeTrimmed <- sp.na.omit(PolygonShapeTrimmed)
 
 DeVar <- ListVariables[[1]] 
@@ -54,6 +54,10 @@ sorted.models <- model.sort.gwr(model.sel, numVars = length(InDeVars),
 model.list <- sorted.models[[1]]
 
 model.view.gwr(DeVar, InDeVars, model.list = model.list)
+
+plot(sorted.models[[2]][,2], col = "black", pch = 20, lty = 5, 
+     main = "Alternative view of GWR model selection procedure", 
+     ylab = "AICc", xlab = "Model number", type = "b")
 
 attach(PolygonShapeTrimmed@data)
 modelOLS <- lm(as.formula(sorted.models[[1]][[length(sorted.models[[1]])]][[1]]))
@@ -160,10 +164,6 @@ spplot(gw.ss.bs$SDF, SpeRhoDepVarIndVar3,key.space = "right",
        col.regions = mypalette.3, pretty=TRUE, cuts=8, 
        main = "GW correlations: Dependent and third independent variable (robust)", 
        sp.layout = map.layout)
-
-plot(sorted.models[[2]][,2], col = "black", pch = 20, lty = 5, 
-     main = "Alternative view of GWR model selection procedure", 
-     ylab = "AICc", xlab = "Model number", type = "b")
 
 #bw.gwr.1 <- bw.gwr(whatever_theoretical_model_is_selected, data = PolygonShapeTrimmed, approach = "AICc",
 #                   kernel = "bisquare", adaptive = TRUE)
