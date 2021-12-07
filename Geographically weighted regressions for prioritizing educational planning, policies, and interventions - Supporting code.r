@@ -55,6 +55,8 @@ model.list <- sorted.models[[1]]
 
 model.view.gwr(DeVar, InDeVars, model.list = model.list)
 
+help(par)
+
 plot(sorted.models[[2]][,2], col = "black", pch = 20, lty = 5, 
      main = "Alternative view of GWR model selection procedure", 
      ylab = "AICc", xlab = "Model number", type = "b")
